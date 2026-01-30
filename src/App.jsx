@@ -4,9 +4,10 @@ import DashboardContent from './components/DashboardContent';
 import PortalLayanan from './components/PortalLayanan';
 import PertukaranDataPage from './components/PertukaranDataPage';
 import KepuasanPage from './components/KepuasanPage';
-// import DukunganPage from './components/DukunganPage'; // Deprecated
-import PelaporanPage from './components/PelaporanPage';
-import SettingsPage from './components/SettingsPage';
+import KeamananSiberPage from './components/KeamananSiberPage';
+import TeknologiDigitalPage from './components/TeknologiDigitalPage';
+import SDMBudayaPage from './components/SDMBudayaPage';
+// Deprecated imports removed
 
 function App() {
   // Default to 'Kelola 20 Indikator' to match previous default state
@@ -16,16 +17,17 @@ function App() {
     switch (activePage) {
       case 'Portal Layanan Digital':
         return <PortalLayanan />;
-      case 'Pertukaran Data':
+      case 'Portal Data': // Was Pertukaran Data
         return <PertukaranDataPage />;
+      case 'Keamanan Siber':
+        return <KeamananSiberPage />;
+      case 'Teknologi Digital':
+        return <TeknologiDigitalPage />;
+      case 'SDM & Budaya Digital':
+        return <SDMBudayaPage />;
       case 'Kepuasan Pengguna':
         return <KepuasanPage />;
-      case 'Pelaporan & Ekspor':
-        return <PelaporanPage />;
-      case 'Pengaturan & Akses':
-        return <SettingsPage />;
       case 'Dasbor PEMDI':
-      case 'Kelola 20 Indikator':
       default:
         // Currently Dasbor and Kelola Indikator use the same view
         return <DashboardContent />;

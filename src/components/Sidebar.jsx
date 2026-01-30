@@ -9,82 +9,67 @@ import {
     Settings,
     HelpCircle,
     ChevronDown,
-    Users
+    Users,
+    ShieldCheck,
+    Cpu,
+    GraduationCap,
+    Database
 } from 'lucide-react';
-import WorkflowModal from './WorkflowModal'; // Import logic-only if needed, or keep for Activity B
 import './Sidebar.css';
 
 const Sidebar = ({ activePage, setActivePage }) => {
-    // Activity B Modal State (Local to Sidebar as it's a specific flow)
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalStep, setModalStep] = useState(0);
+    const [isDashboardOpen, setIsDashboardOpen] = useState(false);
 
     const handleNavClick = (itemName) => {
         setActivePage(itemName);
-
-        // Activity B Trigger Removed (Moved to Page)
     };
 
-    // Activity B Steps
-    const activityBSteps = [
-        "Request Data",
-        "Admin Check",
-        "Owner Approval",
-        "API Key Generated",
-        "Go Live"
-    ];
+    const handleDashboardClick = () => {
+        setIsDashboardOpen(!isDashboardOpen);
+        // If opening, we can optionally set active page, but usually sub-item sets it.
+        // If closing, we keep current page active.
+    };
 
     return (
-        <div className="sidebar-container">
-            {/* Brand */}
-            <div className="brand">
-                <div className="brand-logo">
-                    <div className="logo-placeholder">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Garuda_Pancasila%2C_Coat_of_Arms_of_Indonesia.svg/1920px-Garuda_Pancasila%2C_Coat_of_Arms_of_Indonesia.svg.png" alt="Garuda" style={{ width: '27px', height: '27px' }} />
-                    </div>
-                    <div className="brand-text">
-                        <h1>PEMDI</h1>
-                        <span>Pemerintahan Digital</span>
+        <div className="sidebar">
+            <div className="sidebar-header">
+                <div className="brand">
+                    <div className="brand-logo">
+                        <div className="logo-placeholder">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Garuda_Pancasila%2C_Coat_of_Arms_of_Indonesia.svg/1920px-Garuda_Pancasila%2C_Coat_of_Arms_of_Indonesia.svg.png" alt="Garuda" style={{ width: '27px', height: '27px' }} />
+                        </div>
+                        <div className="brand-text">
+                            <h1>PEMDI</h1>
+                            <span>Pemerintahan Digital</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* Menu */}
-            <nav className="nav-menu">
+            <div className="nav-menu">
+                {/* 1. Dashboard Dropdown */}
                 <div
-                    className={`nav-item ${activePage === 'Dasbor PEMDI' ? 'active' : ''}`}
-                    onClick={() => handleNavClick('Dasbor PEMDI')}
+                    className={`nav-item ${activePage === 'Dasbor PEMDI' || activePage === 'Status 20 Indikator' ? 'active' : ''}`}
+                    onClick={handleDashboardClick}
                 >
                     <LayoutDashboard size={20} />
-                    <span>Dasbor PEMDI</span>
+                    <span>Dashboard PEMDI</span>
+                    <ChevronDown size={16} style={{ marginLeft: 'auto', transform: isDashboardOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
                 </div>
 
-                <div
-                    className={`nav-item ${activePage === 'Kelola 20 Indikator' ? 'active' : ''}`}
-                    onClick={() => handleNavClick('Kelola 20 Indikator')}
-                >
-                    <ListChecks size={20} />
-                    <span>Kelola 20 Indikator</span>
-                    <ChevronDown size={16} className={`ml-auto ${activePage === 'Kelola 20 Indikator' ? 'rotate-180' : ''}`} />
-                </div>
-
-                {/* Submenu for Indikator - Only show when active */}
-                {activePage === 'Kelola 20 Indikator' && (
-                    <div className="sub-menu">
-                        <div className="sub-header">
-                            <span className="grid-icon">::</span>
-                            <span>Aspek A-2</span>
+                {isDashboardOpen && (
+                    <div className="nav-sub-menu" style={{ marginLeft: '2.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                        <div
+                            className={`nav-item sub ${activePage === 'Dasbor PEMDI' ? 'sub-active' : ''}`}
+                            onClick={() => setActivePage('Dasbor PEMDI')}
+                            style={{ fontSize: '0.9rem', color: activePage === 'Dasbor PEMDI' ? '#2563eb' : '#64748b', cursor: 'pointer', padding: '0.3rem 0' }}
+                        >
+                            <span>Status 20 Indikator</span>
                         </div>
-                        <ul>
-                            <li onClick={(e) => { e.stopPropagation(); alert("Filter: Tata Kelola"); }}>1. Tata Kelola</li>
-                            <li onClick={(e) => { e.stopPropagation(); alert("Filter: Penyelenggara"); }}>2. Penyelenggara</li>
-                            <li onClick={(e) => { e.stopPropagation(); alert("Filter: Data"); }}>3. Data</li>
-                            <li onClick={(e) => { e.stopPropagation(); alert("Filter: Keamanan"); }}>4. Keamanan</li>
-                            <li onClick={(e) => { e.stopPropagation(); alert("Filter: Teknologi"); }}>5. Teknologi</li>
-                        </ul>
                     </div>
                 )}
 
+                {/* 2. Portal Layanan Digital */}
                 <div
                     className={`nav-item ${activePage === 'Portal Layanan Digital' ? 'active' : ''}`}
                     onClick={() => handleNavClick('Portal Layanan Digital')}
@@ -92,13 +77,44 @@ const Sidebar = ({ activePage, setActivePage }) => {
                     <Globe size={20} />
                     <span>Portal Layanan Digital</span>
                 </div>
+
+                {/* 3. Portal Data */}
                 <div
-                    className={`nav-item ${activePage === 'Pertukaran Data' ? 'active' : ''}`}
-                    onClick={() => handleNavClick('Pertukaran Data')}
+                    className={`nav-item ${activePage === 'Portal Data' ? 'active' : ''}`}
+                    onClick={() => handleNavClick('Portal Data')}
                 >
-                    <ArrowLeftRight size={20} />
-                    <span>Pertukaran Data</span>
+                    <Database size={20} />
+                    <span>Portal Data</span>
                 </div>
+
+                {/* 4. Keamanan Siber */}
+                <div
+                    className={`nav-item ${activePage === 'Keamanan Siber' ? 'active' : ''}`}
+                    onClick={() => handleNavClick('Keamanan Siber')}
+                >
+                    <ShieldCheck size={20} />
+                    <span>Keamanan Siber</span>
+                </div>
+
+                {/* 5. Teknologi Digital */}
+                <div
+                    className={`nav-item ${activePage === 'Teknologi Digital' ? 'active' : ''}`}
+                    onClick={() => handleNavClick('Teknologi Digital')}
+                >
+                    <Cpu size={20} />
+                    <span>Teknologi Digital</span>
+                </div>
+
+                {/* 6. SDM & Budaya Digital */}
+                <div
+                    className={`nav-item ${activePage === 'SDM & Budaya Digital' ? 'active' : ''}`}
+                    onClick={() => handleNavClick('SDM & Budaya Digital')}
+                >
+                    <GraduationCap size={20} />
+                    <span>SDM & Budaya Digital</span>
+                </div>
+
+                {/* 7. Kepuasan Pengguna */}
                 <div
                     className={`nav-item ${activePage === 'Kepuasan Pengguna' ? 'active' : ''}`}
                     onClick={() => handleNavClick('Kepuasan Pengguna')}
@@ -106,21 +122,7 @@ const Sidebar = ({ activePage, setActivePage }) => {
                     <Users size={20} />
                     <span>Kepuasan Pengguna</span>
                 </div>
-                <div
-                    className={`nav-item ${activePage === 'Pelaporan & Ekspor' ? 'active' : ''}`}
-                    onClick={() => handleNavClick('Pelaporan & Ekspor')}
-                >
-                    <FileText size={20} />
-                    <span>Pelaporan & Ekspor</span>
-                </div>
-                <div
-                    className={`nav-item ${activePage === 'Pengaturan & Akses' ? 'active' : ''}`}
-                    onClick={() => handleNavClick('Pengaturan & Akses')}
-                >
-                    <Settings size={20} />
-                    <span>Pengaturan & Akses</span>
-                </div>
-            </nav>
+            </div>
 
             <div className="sidebar-footer">
                 <div className="nav-item help" onClick={() => alert("Buka Help Center")}>
@@ -128,8 +130,6 @@ const Sidebar = ({ activePage, setActivePage }) => {
                     <span>Help Center</span>
                 </div>
             </div>
-
-            {/* Workflow Modal for Activity B Removed (Replaced by PertukaranDataPage) */}
         </div>
     );
 };
