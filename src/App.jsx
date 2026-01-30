@@ -30,7 +30,7 @@ function App() {
       case 'Dasbor PEMDI':
       default:
         // Currently Dasbor and Kelola Indikator use the same view
-        return <DashboardContent />;
+        return <DashboardContent setActivePage={setActivePage} />;
     }
   };
 

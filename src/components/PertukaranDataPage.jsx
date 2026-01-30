@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, Box, Zap, Database, Building, FileText, ArrowLeft, Download, Eye, Grid, List } from 'lucide-react';
+import { ChevronRight, Box, Zap, Database, Building, FileText, ArrowLeft, Download, Eye, Grid, List, CheckCircle2 } from 'lucide-react';
 import './PertukaranDataPage.css';
 
 const PertukaranDataPage = () => {
@@ -10,6 +10,7 @@ const PertukaranDataPage = () => {
     const [selectedMethod, setSelectedMethod] = useState('GET');
     const [testResponse, setTestResponse] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedApiOrg, setSelectedApiOrg] = useState(null); // Selected OPD for API access
 
     // Catalog State
     const [catalogView, setCatalogView] = useState('org_list'); // 'org_list', 'dataset_list', 'dataset_detail'
@@ -18,15 +19,15 @@ const PertukaranDataPage = () => {
 
     // Mock Data - Organizations
     const organizations = [
-        { id: 1, name: 'Dinas Pendidikan', count: 124, logo: '🎓', desc: 'Data pendidikan, sekolah, dan siswa.' },
-        { id: 2, name: 'Dinas Kesehatan', count: 85, logo: '🏥', desc: 'Data rumah sakit, puskesmas, dan statistik kesehatan.' },
-        { id: 3, name: 'Bappeda', count: 210, logo: '📊', desc: 'Data perencanaan pembangunan daerah.' },
-        { id: 4, name: 'Diskominfo', count: 42, logo: '💻', desc: 'Data statistik sektoral dan infrastruktur digital.' },
-        { id: 5, name: 'Dinas Sosial', count: 67, logo: '🤝', desc: 'Data penerima bantuan sosial dan kemiskinan.' },
-        { id: 6, name: 'Dinas PU', count: 53, logo: '🏗️', desc: 'Data infrastruktur jalan, jembatan, dan tata ruang.' },
+        { id: 1, name: 'Dinas Pendidikan', count: 124, logo: '🎓', desc: 'Data pendidikan, sekolah, dan siswa.', apiStatus: 'Online' },
+        { id: 2, name: 'Dinas Kesehatan', count: 85, logo: '🏥', desc: 'Data rumah sakit, puskesmas, dan statistik kesehatan.', apiStatus: 'Online' },
+        { id: 3, name: 'Bappeda', count: 210, logo: '📊', desc: 'Data perencanaan pembangunan daerah.', apiStatus: 'Maintenance' },
+        { id: 4, name: 'Diskominfo', count: 42, logo: '💻', desc: 'Data statistik sektoral dan infrastruktur digital.', apiStatus: 'Online' },
+        { id: 5, name: 'Dinas Sosial', count: 67, logo: '🤝', desc: 'Data penerima bantuan sosial dan kemiskinan.', apiStatus: 'Online' },
+        { id: 6, name: 'Dinas PU', count: 53, logo: '🏗️', desc: 'Data infrastruktur jalan, jembatan, dan tata ruang.', apiStatus: 'Offline' },
     ];
 
-    // Mock Data - Datasets
+    // Mock Data - Datasets (Preserved)
     const datasets = [
         { id: 101, title: 'Jumlah Siswa per Sekolah Dasar 2024', orgId: 1, date: '29 Jan 2024', format: 'CSV', size: '2.4 MB', views: 1205 },
         { id: 102, title: 'Data Guru Bersertifikasi di Kabupaten Sleman', orgId: 1, date: '15 Jan 2024', format: 'XLSX', size: '1.1 MB', views: 850 },
@@ -44,7 +45,7 @@ const PertukaranDataPage = () => {
         setCatalogView('dataset_detail');
     };
 
-    // API Handlers (Preserved)
+    // API Handlers
     const apiResources = [
         { path: '/', methods: [] },
         { path: '/penduduk', methods: ['GET', 'POST'], children: [{ path: '/{nik}', methods: ['GET', 'DELETE'] }] },
@@ -118,7 +119,7 @@ const PertukaranDataPage = () => {
                             </div>
                         )}
 
-                        {/* Level 2: Dataset List */}
+                        {/* Level 2: Dataset List (Preserved) */}
                         {catalogView === 'dataset_list' && selectedOrg && (
                             <div className="dataset-list-view">
                                 <button className="btn-back" onClick={() => setCatalogView('org_list')}>
@@ -155,7 +156,7 @@ const PertukaranDataPage = () => {
                             </div>
                         )}
 
-                        {/* Level 3: Dataset Detail */}
+                        {/* Level 3: Dataset Detail (Preserved) */}
                         {catalogView === 'dataset_detail' && selectedDataset && (
                             <div className="dataset-detail-view">
                                 <button className="btn-back" onClick={() => setCatalogView('dataset_list')}>
@@ -200,67 +201,98 @@ const PertukaranDataPage = () => {
                     </div>
                 )}
 
-                {/* ----------------- API GATEWAY VIEW (Previous) ----------------- */}
+                {/* ----------------- API GATEWAY VIEW ----------------- */}
                 {activeTab === 'api' && (
                     <div className="api-gateway-wrapper">
-                        <div className="api-layout">
-                            {/* Left: Resources Tree */}
-                            <div className="resources-pane">
-                                <div className="pane-title">Resources</div>
-                                <div className="resource-tree">
-                                    {apiResources.map((res, idx) => (
-                                        <div key={idx} className="resource-item-group">
-                                            <div className={`resource-path ${selectedResource === res.path ? 'active' : ''}`}>
-                                                <span className="path-text">{res.path}</span>
-                                            </div>
-                                            <div className="method-list">
-                                                {res.methods.map(method => (
-                                                    <div key={method} className={`method-item ${method} ${selectedResource === res.path && selectedMethod === method ? 'selected' : ''}`}
-                                                        onClick={() => handleMethodClick(res.path, method)}>
-                                                        {method}
+                        {/* 1. OPD Selector (New) */}
+                        <div className="api-opd-selector">
+                            <h3>Pilih OPD untuk Koneksi API</h3>
+                            <div className="opd-chips">
+                                {organizations.map(org => (
+                                    <button
+                                        key={org.id}
+                                        className={`opd-chip ${selectedApiOrg?.id === org.id ? 'active' : ''}`}
+                                        onClick={() => setSelectedApiOrg(org)}
+                                    >
+                                        <span className="chip-icon">{org.logo}</span>
+                                        {org.name}
+                                        {selectedApiOrg?.id === org.id && <CheckCircle2 size={14} className="check-icon" />}
+                                    </button>
+                                ))}
+                            </div>
+                            {selectedApiOrg && (
+                                <div className="connection-status">
+                                    <div className="status-indicator online"></div>
+                                    <span>Terhubung ke Gateway <strong>{selectedApiOrg.name}</strong></span>
+                                </div>
+                            )}
+                        </div>
+
+                        {selectedApiOrg ? (
+                            <div className="api-layout">
+                                {/* Left: Resources Tree */}
+                                <div className="resources-pane">
+                                    <div className="pane-title">Resources: {selectedApiOrg.name}</div>
+                                    <div className="resource-tree">
+                                        {apiResources.map((res, idx) => (
+                                            <div key={idx} className="resource-item-group">
+                                                <div className={`resource-path ${selectedResource === res.path ? 'active' : ''}`}>
+                                                    <span className="path-text">{res.path}</span>
+                                                </div>
+                                                <div className="method-list">
+                                                    {res.methods.map(method => (
+                                                        <div key={method} className={`method-item ${method} ${selectedResource === res.path && selectedMethod === method ? 'selected' : ''}`}
+                                                            onClick={() => handleMethodClick(res.path, method)}>
+                                                            {method}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                {res.children && res.children.map((child, cIdx) => (
+                                                    <div key={cIdx} className="child-resource">
+                                                        <div className="resource-path"><span className="path-text child">{child.path}</span></div>
+                                                        <div className="method-list">
+                                                            {child.methods.map(method => (
+                                                                <div key={method} className={`method-item ${method} ${selectedResource === child.path && selectedMethod === method ? 'selected' : ''}`}
+                                                                    onClick={() => handleMethodClick(child.path, method)}>
+                                                                    {method}
+                                                                </div>
+                                                            ))}
+                                                        </div>
                                                     </div>
                                                 ))}
                                             </div>
-                                            {res.children && res.children.map((child, cIdx) => (
-                                                <div key={cIdx} className="child-resource">
-                                                    <div className="resource-path"><span className="path-text child">{child.path}</span></div>
-                                                    <div className="method-list">
-                                                        {child.methods.map(method => (
-                                                            <div key={method} className={`method-item ${method} ${selectedResource === child.path && selectedMethod === method ? 'selected' : ''}`}
-                                                                onClick={() => handleMethodClick(child.path, method)}>
-                                                                {method}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Right: Method Execution Pane */}
-                            <div className="execution-pane">
-                                <div className="execution-header">
-                                    <h2>{selectedMethod} - {selectedResource}</h2>
-                                    <span className="subtitle">Method Execution</span>
-                                </div>
-                                <div className="test-console">
-                                    <div className="console-header"><h3>Test Console</h3></div>
-                                    <div className="console-body">
-                                        <button className="btn-test" onClick={runTest} disabled={isLoading}>
-                                            {isLoading ? <>Running...</> : <><Zap size={16} fill="currentColor" /> Test</>}
-                                        </button>
-                                        {testResponse && (
-                                            <div className="response-area">
-                                                <div className="response-meta"><span className="status-code success">Status: {testResponse.status}</span><span className="latency">Time: {testResponse.time}</span></div>
-                                                <div className="json-viewer"><pre>{JSON.stringify(testResponse.data, null, 2)}</pre></div>
-                                            </div>
-                                        )}
+                                {/* Right: Method Execution Pane */}
+                                <div className="execution-pane">
+                                    <div className="execution-header">
+                                        <h2>{selectedMethod} - {selectedResource}</h2>
+                                        <span className="subtitle">{selectedApiOrg.name} Endpoint</span>
+                                    </div>
+                                    <div className="test-console">
+                                        <div className="console-header"><h3>Test Console</h3></div>
+                                        <div className="console-body">
+                                            <button className="btn-test" onClick={runTest} disabled={isLoading}>
+                                                {isLoading ? <>Running...</> : <><Zap size={16} fill="currentColor" /> Test Request</>}
+                                            </button>
+                                            {testResponse && (
+                                                <div className="response-area">
+                                                    <div className="response-meta"><span className="status-code success">Status: {testResponse.status}</span><span className="latency">Time: {testResponse.time}</span></div>
+                                                    <div className="json-viewer"><pre>{JSON.stringify(testResponse.data, null, 2)}</pre></div>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="api-empty-state">
+                                <Box size={48} color="#cbd5e1" />
+                                <p>Silakan pilih OPD di atas untuk mulai menjelajahi API.</p>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

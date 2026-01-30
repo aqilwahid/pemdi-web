@@ -4,7 +4,7 @@ import IndicatorsTable from './IndicatorsTable';
 import RightSidebar from './RightSidebar';
 import './DashboardContent.css';
 
-const DashboardContent = () => {
+const DashboardContent = ({ setActivePage }) => {
     return (
         <div className="dashboard-grid">
             {/* Left Column (Main Stats) */}
@@ -15,7 +15,7 @@ const DashboardContent = () => {
 
             {/* Right Column (Side Stats) */}
             <div className="right-column">
-                <RightSidebar />
+                <RightSidebar setActivePage={setActivePage} />
             </div>
         </div>
     );

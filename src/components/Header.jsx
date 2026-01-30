@@ -1,10 +1,15 @@
 import React from 'react';
-import { Search, Bell, HelpCircle, ChevronDown, User } from 'lucide-react';
+import { Search, Bell, HelpCircle, ChevronDown, User, Menu } from 'lucide-react';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ onToggleSidebar }) => {
     return (
         <header className="header-container">
+            {/* Mobile Menu Toggle */}
+            <button className="menu-toggle" onClick={onToggleSidebar}>
+                <Menu size={24} color="#1e3a8a" />
+            </button>
+
             {/* Search */}
             <div className="search-bar">
                 <Search size={18} className="search-icon" />
