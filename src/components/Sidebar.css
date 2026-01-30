@@ -4,8 +4,8 @@
     flex-direction: column;
     height: 100vh;
     /* Full viewport height */
-    padding: 1.5rem;
-    /* Increased padding for better spacing */
+    padding: 1rem;
+    /* Reduced padding */
     background-color: white;
     border-right: 1px solid #e5e7eb;
     font-size: 0.9rem;
@@ -64,7 +64,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem 1rem;
+    padding: 0.6rem 0.8rem;
     border-radius: 8px;
     /* radius-md */
     color: #64748b;
@@ -95,7 +95,7 @@
 }
 
 .nav-item.sub {
-    padding: 0.5rem 0.5rem;
+    padding: 0.6rem 0.75rem;
     font-size: 0.85rem;
     border-radius: 6px;
 }
