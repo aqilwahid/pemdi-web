@@ -1,0 +1,185 @@
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+/* Stat Cards */
+.stat-card {
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    color: white;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100px;
+}
+
+.stat-card.orange {
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+}
+
+.stat-card.green {
+    background: linear-gradient(135deg, #10B981, #059669);
+}
+
+.stat-card.blue {
+    background: linear-gradient(135deg, #3B82F6, #2563EB);
+}
+
+.stat-card.yellow {
+    background: linear-gradient(135deg, #FCD34D, #F59E0B);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.card-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.ring-mini {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.ring-mini.white {
+    width: auto;
+    padding: 0 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+}
+
+.card-main-score {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.card-main-score .sub,
+.card-main-score .tiny {
+    font-size: 0.7rem;
+    font-weight: 400;
+    opacity: 0.9;
+    margin-left: 0.2rem;
+}
+
+.card-main-score .tiny {
+    font-size: 0.6rem;
+    display: block;
+    line-height: 1.1;
+    margin-left: 0;
+}
+
+/* Helpdesk Widget */
+.helpdesk-widget,
+.export-section {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.widget-header,
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    gap: 0.5rem;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.helpdesk-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-item .val {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.stat-item .lbl {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.btn-blue-block {
+    width: 100%;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 0.6rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+/* Export Buttons */
+.export-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.btn-export {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: var(--radius-md);
+    background: white;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+}
+
+.btn-export.pdf::before {
+    content: "📄";
+}
+
+.btn-export.excel::before {
+    content: "📊";
+}
