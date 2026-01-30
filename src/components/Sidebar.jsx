@@ -60,7 +60,6 @@ const Sidebar = ({ activePage, setActivePage }) => {
                 >
                     <LayoutDashboard size={20} />
                     <span>Dasbor PEMDI</span>
-                    <ChevronDown size={16} className="ml-auto" />
                 </div>
 
                 <div
@@ -69,23 +68,25 @@ const Sidebar = ({ activePage, setActivePage }) => {
                 >
                     <ListChecks size={20} />
                     <span>Kelola 20 Indikator</span>
+                    <ChevronDown size={16} className={`ml-auto ${activePage === 'Kelola 20 Indikator' ? 'rotate-180' : ''}`} />
                 </div>
 
-                {/* Submenu for Indikator */}
-                <div className="sub-menu">
-                    <div className="sub-header">
-                        <span className="grid-icon">::</span>
-                        <span>Aspek A-2</span>
-                        <ChevronDown size={14} className="ml-auto" />
+                {/* Submenu for Indikator - Only show when active */}
+                {activePage === 'Kelola 20 Indikator' && (
+                    <div className="sub-menu">
+                        <div className="sub-header">
+                            <span className="grid-icon">::</span>
+                            <span>Aspek A-2</span>
+                        </div>
+                        <ul>
+                            <li onClick={(e) => { e.stopPropagation(); alert("Filter: Tata Kelola"); }}>1. Tata Kelola</li>
+                            <li onClick={(e) => { e.stopPropagation(); alert("Filter: Penyelenggara"); }}>2. Penyelenggara</li>
+                            <li onClick={(e) => { e.stopPropagation(); alert("Filter: Data"); }}>3. Data</li>
+                            <li onClick={(e) => { e.stopPropagation(); alert("Filter: Keamanan"); }}>4. Keamanan</li>
+                            <li onClick={(e) => { e.stopPropagation(); alert("Filter: Teknologi"); }}>5. Teknologi</li>
+                        </ul>
                     </div>
-                    <ul>
-                        <li onClick={() => alert("Filter: Tata Kelola")}>1. Tata Kelola</li>
-                        <li onClick={() => alert("Filter: Penyelenggara")}>2. Penyelenggara</li>
-                        <li onClick={() => alert("Filter: Data")}>3. Data</li>
-                        <li onClick={() => alert("Filter: Keamanan")}>4. Keamanan</li>
-                        <li onClick={() => alert("Filter: Teknologi")}>5. Teknologi</li>
-                    </ul>
-                </div>
+                )}
 
                 <div
                     className={`nav-item ${activePage === 'Portal Layanan Digital' ? 'active' : ''}`}
