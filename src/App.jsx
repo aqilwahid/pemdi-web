@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import DashboardLayout from './components/DashboardLayout';
 import DashboardContent from './components/DashboardContent';
 import PortalLayanan from './components/PortalLayanan';
-import DukunganPage from './components/DukunganPage';
+import PertukaranDataPage from './components/PertukaranDataPage';
+import KepuasanPage from './components/KepuasanPage';
+// import DukunganPage from './components/DukunganPage'; // Deprecated
 import PelaporanPage from './components/PelaporanPage';
 import SettingsPage from './components/SettingsPage';
 
@@ -14,8 +16,10 @@ function App() {
     switch (activePage) {
       case 'Portal Layanan Digital':
         return <PortalLayanan />;
-      case 'Dukungan & Kepuasan':
-        return <DukunganPage />;
+      case 'Pertukaran Data':
+        return <PertukaranDataPage />;
+      case 'Kepuasan Pengguna':
+        return <KepuasanPage />;
       case 'Pelaporan & Ekspor':
         return <PelaporanPage />;
       case 'Pengaturan & Akses':

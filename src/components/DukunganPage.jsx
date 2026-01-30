@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Ticket, Star, MessageCircle, AlertCircle, Phone, Mail, Clock, CheckCircle, Search } from 'lucide-react';
+import { Ticket, Star, MessageCircle, AlertCircle, Phone, Mail, Clock, CheckCircle, Search, Users, Send } from 'lucide-react';
 import WorkflowModal from './WorkflowModal';
 import './DukunganPage.css';
 
 const DukunganPage = () => {
-    const [activeTab, setActiveTab] = useState('helpdesk'); // 'helpdesk' or 'satisfaction'
+    const [activeTab, setActiveTab] = useState('helpdesk'); // 'helpdesk', 'satisfaction', 'aspirasi'
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalType, setModalType] = useState('helpdesk'); // 'helpdesk' or 'public_report'
     const [modalStep, setModalStep] = useState(0);
 
     const helpdeskStats = [
@@ -28,6 +29,13 @@ const DukunganPage = () => {
         { id: 'TKT-2024-003', subject: 'Permintaan akses user tambahan', status: 'Resolved', priority: 'Low', date: '2024-01-25' },
     ];
 
+    // Dummy Community Reports
+    const [communityReports, setCommunityReports] = useState([
+        { id: 'RPT-W-001', subject: 'Layanan KTP Digital lambat diakses', category: 'Infrastruktur', status: 'Diterima', date: '2024-01-29', sender: 'Warga Sleman' },
+        { id: 'RPT-W-002', subject: 'Usulan penambahan fitur pendaftaran UMKM', category: 'Fitur', status: 'Ditinjau', date: '2024-01-28', sender: 'Komunitas UMKM' },
+        { id: 'RPT-W-003', subject: 'Tampilan kurang ramah disabilitas', category: 'Aksesibilitas', status: 'Selesai', date: '2024-01-25', sender: 'Anonim' },
+    ]);
+
     // Activity C Workflow Steps (Helpdesk)
     const activityCSteps = [
         "Input Tiket",
@@ -38,8 +46,23 @@ const DukunganPage = () => {
     ];
 
     const handleCreateTicket = () => {
+        setModalType('helpdesk');
         setModalStep(0);
         setIsModalOpen(true);
+    };
+
+    const handlePublicReport = () => {
+        // Simulasi menambah laporan baru
+        const newReport = {
+            id: `RPT-W-00${communityReports.length + 1}`,
+            subject: 'Laporan Baru dari Masyarakat (Simulasi)',
+            category: 'Umum',
+            status: 'Baru',
+            date: new Date().toISOString().split('T')[0],
+            sender: 'Masyarakat'
+        };
+        setCommunityReports([newReport, ...communityReports]);
+        alert("Terima kasih! Laporan Anda telah tercatat di sistem Aspirasi Masyarakat.");
     };
 
     return (
@@ -62,6 +85,12 @@ const DukunganPage = () => {
                     onClick={() => setActiveTab('satisfaction')}
                 >
                     <Star size={18} /> Survei Kepuasan
+                </button>
+                <button
+                    className={`tab-btn ${activeTab === 'aspirasi' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('aspirasi')}
+                >
+                    <Users size={18} /> Aspirasi Masyarakat
                 </button>
             </div>
 
@@ -167,11 +196,51 @@ const DukunganPage = () => {
                 </div>
             )}
 
+            {activeTab === 'aspirasi' && (
+                <div className="tab-content aspirasi-view">
+                    <div className="aspirasi-hero">
+                        <div className="hero-text">
+                            <h3>Suara Masyarakat</h3>
+                            <p>Kanal partisipasi publik untuk menyampaikan kritik, saran, dan laporan terkait layanan digital pemerintahan.</p>
+                        </div>
+                        <button className="btn-primary-lg" onClick={handlePublicReport}>
+                            <Send size={18} /> Simulasi Laporan Warga
+                        </button>
+                    </div>
+
+                    <div className="content-section">
+                        <h3>Daftar Aspirasi Masuk</h3>
+                        <div className="ticket-list">
+                            <div className="ticket-header">
+                                <span>ID Laporan</span>
+                                <span>Topik Aduan</span>
+                                <span>Pengirim</span>
+                                <span>Status</span>
+                                <span>Tanggal</span>
+                            </div>
+                            {communityReports.map(report => (
+                                <div key={report.id} className="ticket-row">
+                                    <span className="ticket-id">{report.id}</span>
+                                    <span className="ticket-subject">
+                                        {report.subject}
+                                        <br />
+                                        <small style={{ color: '#6b7280' }}>Kategori: {report.category}</small>
+                                    </span>
+                                    <span>{report.sender}</span>
+                                    <span className="status-pill open">{report.status}</span>
+                                    <span className="ticket-date">{report.date}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Workflow Modal for Activity C (Helpdesk) */}
             <WorkflowModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                title="Layanan Helpdesk & Tiket"
+                title={modalType === 'helpdesk' ? "Layanan Helpdesk & Tiket" : "Laporan Warga"}
                 steps={activityCSteps}
                 currentStep={modalStep}
             >

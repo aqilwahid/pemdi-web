@@ -8,7 +8,8 @@ import {
     FileText,
     Settings,
     HelpCircle,
-    ChevronDown
+    ChevronDown,
+    Users
 } from 'lucide-react';
 import WorkflowModal from './WorkflowModal'; // Import logic-only if needed, or keep for Activity B
 import './Sidebar.css';
@@ -21,11 +22,7 @@ const Sidebar = ({ activePage, setActivePage }) => {
     const handleNavClick = (itemName) => {
         setActivePage(itemName);
 
-        // Activity B Trigger
-        if (itemName === 'Pertukaran Data') {
-            setModalStep(0);
-            setIsModalOpen(true);
-        }
+        // Activity B Trigger Removed (Moved to Page)
     };
 
     // Activity B Steps
@@ -103,11 +100,11 @@ const Sidebar = ({ activePage, setActivePage }) => {
                     <span>Pertukaran Data</span>
                 </div>
                 <div
-                    className={`nav-item ${activePage === 'Dukungan & Kepuasan' ? 'active' : ''}`}
-                    onClick={() => handleNavClick('Dukungan & Kepuasan')}
+                    className={`nav-item ${activePage === 'Kepuasan Pengguna' ? 'active' : ''}`}
+                    onClick={() => handleNavClick('Kepuasan Pengguna')}
                 >
-                    <Headphones size={20} />
-                    <span>Dukungan & Kepuasan</span>
+                    <Users size={20} />
+                    <span>Kepuasan Pengguna</span>
                 </div>
                 <div
                     className={`nav-item ${activePage === 'Pelaporan & Ekspor' ? 'active' : ''}`}
@@ -132,24 +129,7 @@ const Sidebar = ({ activePage, setActivePage }) => {
                 </div>
             </div>
 
-            {/* Workflow Modal for Activity B */}
-            <WorkflowModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                title="Proses Pertukaran Data"
-                steps={activityBSteps}
-                currentStep={modalStep}
-            >
-                <div style={{ textAlign: 'center', padding: '20px' }}>
-                    <p>Simulasi Workflow Pertukaran Data (Activity B)</p>
-                    <button className="btn-primary" onClick={() => {
-                        if (modalStep < 4) setModalStep(modalStep + 1);
-                        else setIsModalOpen(false);
-                    }}>
-                        Next Step
-                    </button>
-                </div>
-            </WorkflowModal>
+            {/* Workflow Modal for Activity B Removed (Replaced by PertukaranDataPage) */}
         </div>
     );
 };
